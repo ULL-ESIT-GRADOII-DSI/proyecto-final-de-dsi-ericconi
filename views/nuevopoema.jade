@@ -1,0 +1,15 @@
+extends layout
+block content
+    if(user)        
+        .col-sm-9
+           
+            input#fname.form-control(autofocus,type="text",name="fname",placeholder="Título")
+            textarea#original.drop_zone.form-control(cols='121', rows='10')
+            button#save.btn.btn-success(type='button') Save
+            
+    else 
+        .col-sm-offset-2.col-sm-7
+            h1 No puedes subir archivos
+            p 
+            | Por favor, registrate para subir archivos 
+            a(href="registro") REGISTRARSE

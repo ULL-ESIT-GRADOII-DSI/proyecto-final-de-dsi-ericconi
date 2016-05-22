@@ -1,0 +1,39 @@
+extends layout
+
+block content
+			.col-sm-9
+				button.anyadir.btn.btn-default.btn-sm.btn-block(type='button', onclick="window.location.href='/nuevolibro'") Añadir
+				br
+				table#tablelibro.table.table-hover
+					tr
+						th Nombre
+						th Autor
+						th Likes
+					
+					
+					script(type='text/javascript').
+						
+					
+
+							$.get('json', function (json) {
+									
+									console.log(json);
+									var data = "";
+									for (l in json) {
+											data += '<tr id="'+ json[l].titulo + '" class="center click_inicio">'
+											data += '<td id ="' + json[l].titulo + '1">' + json[l].titulo + '</td>'
+											data += '<td id = "' + json[l].titulo + '2">' + json[l]._creator.name + '</td>'
+										    data += '<td>' + json[l].likes + '</td>'
+											data += '</tr>'
+											
+									}
+									$(".table").append(data)
+								
+							});
+							
+							
+							
+block title
+		#titulo
+				.col-sm-12
+					h3  Libros

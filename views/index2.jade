@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  if(user)
+    ul
+      li
+        img(src="#{user.photo}")
+      li 
+        form(method='post', action="api/photo",enctype="multipart/form-data")
+          input(type='file',name="userPhoto")
+          input(type='submit', value='Registrar')
+          script(type='text/javascript')
+            console.log(photo)
+        
+      li 
+        Bienvenido #{user.name}
+      li
+        a(href='logout') Salir
+  else
+    ul
+      li
+        a(href='auth/twitter') Login con Twitter
+      li
+        a(href='auth/facebook') Login con Facebook
+      li  
+        a(href='auth') Login
+      li 
+        a(href='registrar') Registro
+    

@@ -1,0 +1,50 @@
+extends layout
+block content
+
+	.col-sm-9
+					button.anyadir.btn.btn-default.btn-sm.btn-block(type='button', onclick="window.location.href='/nuevolibro'") Añadir
+					br
+					table#tablelibro.table.table-hover
+						tr
+							th Nombre
+							th Autor
+							th Tipo
+							th Likes
+						
+						
+						script(type='text/javascript').
+							
+						
+	
+								$.get('json', function (json) {
+										
+										console.log(json);
+										var data = "";
+										for (l in json) {
+												data += '<tr id="click_inicio" class="center">'
+												data += '<td>' + json[l].titulo + '</td>'
+												data += '<td>' + json[l]._creator.name + '</td>'
+												data += '<td>' + json[l].contenido + '</td>'
+											    data += '<td>' + json[l].likes + '</td>'
+												data += '</tr>'
+												
+										}
+										$(".table").append(data)
+									
+								});
+								
+								
+								
+							
+								
+				//  
+						tr#click_inicio(onclick="location='/'")
+							td 50 sombras de grey
+							td Lorca
+							td Novela
+							td 
+block title
+		#titulo
+				.col-sm-12
+					h3  Novelas
+						

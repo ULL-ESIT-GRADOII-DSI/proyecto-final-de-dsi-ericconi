@@ -1,0 +1,57 @@
+extends layoutpre
+block content
+    
+        #contenido
+          .row
+            br
+            .col-sm-3
+              br
+              #perfil
+                if(user)
+                  if(user.photo)
+                    img(src="#{user.photo}", height='200', width='200')
+                  else
+                    img(src='Usuario-Icono.jpg', height='200', width='200')
+                else
+                  img(src='Usuario-Icono.jpg', height='200', width='200')
+                  
+                
+                form#form_input.form-group(method='post', action="api/photo",enctype="multipart/form-data")
+                  label(for='exampleInputFile')
+                  input#exampleInputFile(type='file',name="userPhoto")
+                  input#saveima.btn.btn-danger(type='submit',value="Guardar")
+                if(user)
+                  h4
+                    |Nombre:&nbsp;
+                    strong #{user.name}
+                  br
+                  button#edit.btn.btn-success Editar
+                  
+                  
+            .col-sm-9
+              .contenido
+                .table-responsive
+                  table.table
+                    tr
+                      th Nombre
+                      th Autor
+                      th Tipo
+                      th Likes
+                      th
+                    tr
+                      td El señor de los anillos
+                      td 20 poemas de amor y 1 canción desesperada
+                      td 50 sombras de Gray
+                      td
+                      td
+                    
+                        button#editar_l.btn.btn-default(type='button', aria-label='Left Align')
+                          span.glyphicon.glyphicon-pencil(aria-hidden='true')
+                      
+                        button#delete_l.btn.btn-default(type='button', aria-label='Left Align')
+                          span.glyphicon.glyphicon-trash(aria-hidden='true')
+        #pie
+          .row
+            .col-sm-12
+              hr
+      

@@ -1,0 +1,10 @@
+extends layoutpre
+
+block content
+
+    form(method='post', action="registrar")
+      input(type='text', name='username',placeholder='name')
+      input(type='password', name='password',placeholder='password')
+      input(type='file',name="userPhoto")
+      input(type='submit', value='Registrar')
+      

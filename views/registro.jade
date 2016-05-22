@@ -1,0 +1,38 @@
+extends layoutpre
+block content
+    
+  
+  
+        #contenido
+          .row
+            br
+            .col-sm-3
+              img.img-responsive(src='libroypluma.jpg')
+            .col-sm-9.align
+              .contenido
+                form.form-horizontal(method='post', action='registro')
+                  .form-group
+                    label.col-sm-2.control-label(for='inputEmail3') Nombre
+                    .col-sm-10
+                      input#inptEmail3.form-control(type='text', name='username', placeholder='Nombre')
+                  .form-group.align
+                    label.col-sm-2.control-label(for='inputEmail3') E-mail
+                    .col-sm-10
+                      input#inputEmail3.form-control(type='email', name='email', placeholder='Email')
+                  .form-group.align
+                    label.col-sm-2.control-label(for='inputPassword3') Password
+                    .col-sm-10
+                      input#inputPassword3.form-control(type='password', name='password', placeholder='Password')
+                  .form-group
+                    .col-sm-offset-2.col-sm-10
+                      button.btn.btn-default(type='submit') Sign up
+                    #red_social
+                      a(href='/auth/facebook')
+                        img(src='fb.png', height='42', width='42', align='center')
+                      a(href='/auth/twitter')
+                        img(src='twitter.png', height='42', width='42', align='center')
+      #pie
+        .row
+          .col-sm-12
+            hr
+    
