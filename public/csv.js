@@ -16,17 +16,7 @@
                    });
             
         });
-         //$('.click_inicio').each( (_,y) => {
-             
-               $('tr').click(() => { 
-                     console.log("hola");
-                     $.get("/visualizar")/*,{titulo: $('tr > td > # + '  + y + '1') ,creador:  $('tr > td > #' + y + '2')},(readData) => {
-                       console.log("gola");
-                     });*/
-                });
-         //});
         
-        //$.get("visualizar",{json[l].titulo,json[l]._creator.name};' + ');"
         
         
         $("#edit").click(() => {
@@ -40,26 +30,24 @@
     
           
     });
-   $(document).ready(function() { 
-  $(window).load(function() { 
-     //insert all your ajax callback code here. 
-     //Which will run only after page is fully loaded in background.
 
-         
-    });
-   });
    $(window).load(function (){
     var i = setInterval(function ()
     {
         if ($('.center').length)
         {
             clearInterval(i);
-             $('tr').click(() => { 
-                     $.get("/visualizar")/*,{titulo: $('tr > td > # + '  + y + '1') ,creador:  $('tr > td > #' + y + '2')},(readData) => {
-                            console.log("hola");
-                     });*/
+            $('.center').each( (_,y) => {
+                console.log($(y))
+                var tit =  $(y).attr('id');
+                var val =  $(y).attr('value');
+                $(y).click(() => { 
+                         $.get("/buscar",{
+                             titulo: tit,
+                             creador: val});
                 });
-            // safe to execute your code here
+            
+            });
         }
     }, 100);
 });

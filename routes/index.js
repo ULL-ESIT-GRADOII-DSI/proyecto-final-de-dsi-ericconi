@@ -39,7 +39,7 @@ exports.nuevopoema = function(req, res){
     user: req.user
   });
 };
-
+/*
 exports.visualizar = function(req, res){
   
   res.render('visualizar', {
@@ -49,7 +49,7 @@ exports.visualizar = function(req, res){
 };
 
 
-
+*/
 
 
 

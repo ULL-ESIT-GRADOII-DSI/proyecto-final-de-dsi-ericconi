@@ -165,7 +165,7 @@ app.get('/poemas', routes.poemas);
 app.get('/registro', routes.registro);
 app.get('/nuevopoema', routes.nuevopoema);
 app.get('/nuevonovela', routes.nuevonovela);
-app.get('/visualizar', routes.visualizar);
+//app.get('/visualizar', routes.visualizar);
 
 
 
@@ -202,29 +202,43 @@ passport.use(new LocalStrategy(
     });
   }
 ));
+var titulo;
+var contenido;
+var creador;
 
-
+app.get('/buscar',function(req, res) {
+    
+    var cre = req.query.creador;
+   
+     Books
+        .find({'titulo':req.query.titulo})
+        .populate('_creator')
+        .exec(function (err, file) {
+          if (err) return err;
+          var l;
+          for (l in file) {
+              if(file[l]._creator.name == cre){
+                  titulo = file[l].titulo;
+                  creador = file[l].creador;
+                  contenido = file[l].contenido;
+                  
+              }
+          }
+              
+        });
+       
+})
 
 
 app.get('/visualizar',function(req, res) {
-    console.log("here");
-    res.render("visualizar");/*
-     Books
-        .find({})
-        .populate('_creator')
-        .exec(function (err, file) {
-            
-          if (err) return err;
-          console.log(file.titulo);
-          //console.log('The creator is %s', eleg._creator.name);
+  
           res.render('visualizar', {
-              tit: file.titulo,
-              cont: file.contenido
-              
+              tit: titulo,
+              cont: contenido,
+              creador: creador,
+              user: req.user
           });
-          // prints "The creator is Aaron"
-        });*/
-})
+});
 
 
 app.get('/json',function(req, res) {
@@ -233,7 +247,6 @@ app.get('/json',function(req, res) {
         .find({})
         .populate('_creator')
         .exec(function (err, file) {
-            console.log(file.likes);
           if (err) return err;
           //console.log('The creator is %s', eleg._creator.name);
           res.json(file)

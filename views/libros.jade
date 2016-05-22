@@ -9,6 +9,7 @@ block content
 						th Nombre
 						th Autor
 						th Likes
+						th Ver
 					
 					
 					script(type='text/javascript').
@@ -20,10 +21,11 @@ block content
 									console.log(json);
 									var data = "";
 									for (l in json) {
-											data += '<tr id="'+ json[l].titulo + '" class="center click_inicio">'
-											data += '<td id ="' + json[l].titulo + '1">' + json[l].titulo + '</td>'
-											data += '<td id = "' + json[l].titulo + '2">' + json[l]._creator.name + '</td>'
-										    data += '<td>' + json[l].likes + '</td>'
+											data += '<tr id="'+ json[l].titulo + '" class="center" value="' + json[l]._creator.name + '">'
+											data += '<td>'  + json[l].titulo + '</td>'
+											data += '<td>' + json[l]._creator.name + '</td>'
+										    data += '<td>' + json[l].likes + '</td> '
+										    data += '<td> <a href="visualizar"><span id="non" class="glyphicon glyphicon-eye-open "> </a></td>' 
 											data += '</tr>'
 											
 									}
