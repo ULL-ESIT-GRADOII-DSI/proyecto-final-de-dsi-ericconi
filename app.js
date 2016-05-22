@@ -72,6 +72,7 @@ app.use(express.logger('dev'));
 
 // Ruta de los archivos estáticos (HTML estáticos, JS, CSS,...)
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.cookieParser('secret'));
 app.use(express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 // Indicamos que use sesiones, para almacenar el objeto usuario
@@ -115,6 +116,14 @@ var Book = new Schema({
    
 }, {collection: 'Book'});
 
+var Seguidor = new Schema({
+    name: String,
+    siguiendo: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserDetails'}]
+   
+}, {collection: 'Seguidor'});
+
+
+
 var Novela = new Schema({
     _creator : { type: mongoose.Schema.Types.ObjectId, ref: 'UserDetails' },
     titulo: String,
@@ -132,7 +141,7 @@ var Poema = new Schema({
 }, {collection: 'Poema'});
 var UserDetails = mongoose.model('UserDetails',UserDetail);
 var Books = mongoose.model('Books',Book);
-
+var Seguidores = mongoose.model('Seguidores',Seguidor);
 var Poemas = mongoose.model('Poemas',Poema);
 var Novelas = mongoose.model('Novelas',Novela);
 
@@ -202,6 +211,85 @@ passport.use(new LocalStrategy(
     });
   }
 ));
+
+app.get('/cargar',function(req, res) {
+    var name = req.user.name;
+    Books
+        .find({})
+        .populate('_creator')
+        .exec(function (err, file) {
+          if (err) return err;
+          var l;
+          for (l in file) {
+              if(file[l]._creator.name == name){
+                  res.json(file);
+                  
+              }
+          }
+              
+        });
+    
+});
+
+
+app.get('/buscarSeguidores',function(req, res) {
+    
+    var name = req.user.name;
+    
+     Seguidores
+        .find({})
+        .populate('siguiendo')
+        .exec(function (err, file) {
+          if (err) return err;
+          var l,i;
+          console.log(file)
+          
+          for (l in file) {
+              for (i in l){
+                   if(file[l].siguiendo[i].name == name){
+                        res.json(file);
+              }
+          }
+         
+             
+          }
+        });
+});
+
+
+app.get('/seguir',function(req, res) {
+    var nus = req.user.name;
+    var cre = req.body.creador;
+    console.log("aqui");
+    UserDetails.findOne({"name":nus}, function(err, user) {
+        if(err) return err;
+    
+        user.update(function(err){
+            if (err) console.log(err);
+          
+            /********************* USUARIO CON DATOS *********************/
+            let input = new Seguidores({
+                 name: nus,
+                 siguiendo: user._id
+            });
+     
+            
+            /********************* GUARDADO EN BS *********************/
+            input.save(function(err) {
+                if (err) {
+                    return err;
+                }
+                console.log("Guardado en BDD");
+            });
+            
+           
+        });
+        
+   });
+   
+});
+
+
 var titulo;
 var contenido;
 var creador;
@@ -221,6 +309,29 @@ app.get('/buscar',function(req, res) {
                   titulo = file[l].titulo;
                   creador = file[l].creador;
                   contenido = file[l].contenido;
+                  
+              }
+          }
+              
+        });
+       
+})
+
+app.get('/borrar',function(req, res) {
+    
+    var cre = req.user.name;
+
+     Books
+        .find({'titulo':req.query.titulo})
+        .populate('_creator')
+        .exec(function (err, file) {
+          
+           
+          if (err) return err;
+          var l;
+          for (l in file) {
+              if(file[l]._creator.name == cre){
+                 Books.remove({'titulo':file[l].titulo}).exec();
                   
               }
           }
@@ -253,7 +364,9 @@ app.get('/json',function(req, res) {
           // prints "The creator is Aaron"
         });
 
+
 });
+
 
 
 
@@ -347,28 +460,6 @@ app.get('/save', function(req, res) {
                 }
                 console.log("Guardado en BDD");
             });
-            
-            /*
-            Promise.all([input]).then(() => { 
-            
-                Books
-                .findOne({ titulo: 'hola' })
-                .populate('_creator')
-                .exec(function (err, eleg) {
-                  if (err) return err;
-                  console.log('The creator is %s', eleg._creator.name);
-                  // prints "The creator is Aaron"
-                });
-            
-            });
-            */
-           /* 
-            if (entradas.length >= 4) {
-                Modelo.find({ name: entradas[3].name }).remove().exec();
-            
-            };
-            */
-            
         });
         
    });
@@ -388,18 +479,12 @@ app.get('/', function(req,res){
     		    user.photo = user2.photo;
     		    console.log(user.photo);
     	        	res.render('index', {
-                    // Enviamos como variables un título
-                    // y objeto 'user' que contiene toda
-                    // la información del usuario y viaja en el 'request'
                     title: 'Ejemplo de Passport JS',
                     user: user
                   });
     		});
     } else{
         res.render('index', {
-            // Enviamos como variables un título
-            // y objeto 'user' que contiene toda
-            // la información del usuario y viaja en el 'request'
             title: 'Ejemplo de Passport JS',
             user: user
         });   
@@ -414,19 +499,14 @@ app.get('/perfil', function(req,res){
     		    if(err){return err}
     		    user.photo = user2.photo;
     		    console.log(user.photo);
+    		        
     	        	res.render('perfil', {
-                    // Enviamos como variables un título
-                    // y objeto 'user' que contiene toda
-                    // la información del usuario y viaja en el 'request'
                     title: 'Ejemplo de Passport JS',
                     user: user
                   });
     		});
     } else{
         res.render('perfil', {
-            // Enviamos como variables un título
-            // y objeto 'user' que contiene toda
-            // la información del usuario y viaja en el 'request'
             title: 'Ejemplo de Passport JS',
             user: user
         });   

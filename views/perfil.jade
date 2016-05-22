@@ -24,6 +24,8 @@ block content
                   h4
                     |Nombre:&nbsp;
                     strong #{user.name}
+                  p Seguidores:
+                  p#seg
                   br
                   button#edit.btn.btn-success Editar
                   
@@ -31,25 +33,31 @@ block content
             .col-sm-9
               .contenido
                 .table-responsive
-                  table.table
+                  table#tablelibro.table.table-hover
                     tr
                       th Nombre
                       th Autor
-                      th Tipo
                       th Likes
                       th
-                    tr
-                      td El señor de los anillos
-                      td 20 poemas de amor y 1 canción desesperada
-                      td 50 sombras de Gray
-                      td
-                      td
-                    
-                        button#editar_l.btn.btn-default(type='button', aria-label='Left Align')
-                          span.glyphicon.glyphicon-pencil(aria-hidden='true')
+            script(type='text/javascript').
+              $.get('cargar', function (json) {
+                  
+                  var data = "";
+                  for (l in json) {
+                      data += '<tr id="'+ json[l].titulo + '" class="center" value="' + json[l]._creator.name + '">'
+                      data += '<td>'  + json[l].titulo + '</td>'
+                      data += '<td>' + json[l]._creator.name + '</td>'
+                      data += '<td>' + json[l].likes + '</td> '
+                      data += '<td><button id="editar_l" value="' + json[l].titulo +'" type="button" aria-label="Left Align" class="editar btn btn-default"><span aria-hidden="true" class="glyphicon glyphicon-pencil"></span></button>'
+                      data += '<button id="delete_l" value="' + json[l].titulo +'" type="button" aria-label="Left Align" class="borrar btn btn-default"><span aria-hidden="true" class="glyphicon glyphicon-trash"></span></button></td>' 
+                      data += '</tr>'
                       
-                        button#delete_l.btn.btn-default(type='button', aria-label='Left Align')
-                          span.glyphicon.glyphicon-trash(aria-hidden='true')
+                  }
+                  $(".table").append(data)
+                
+              });
+                   
+                     
         #pie
           .row
             .col-sm-12

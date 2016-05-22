@@ -1,20 +1,38 @@
 extends layout
 block content
+		.col-sm-9
+				table#tablelibro.table.table-hover
+					tr
+						th Nombre
+						th Autor
+						th Likes
+						th Ver
+					
+					
+					script(type='text/javascript').
+						
+					
 
-    
-            .col-sm-9
-              table.table.table-hover
-                tr
-                  th Nombre
-                  th Autor
-                  th Tipo
-                  th Likes
-                tr#click_inicio(onclick="location='index.html'")
-                  td 50 sombras de grey
-                  td Lorca
-                  td Novela
-                  td  
-            #pie
-              .row
-                .col-sm-12
-                  hr
+							$.get('json', function (json) {
+									
+									console.log(json);
+									var data = "";
+									for (l in json) {
+											data += '<tr id="'+ json[l].titulo + '" class="center" value="' + json[l]._creator.name + '">'
+											data += '<td>'  + json[l].titulo + '</td>'
+											data += '<td>' + json[l]._creator.name + '</td>'
+												data += '<td>' + json[l].likes + '</td> '
+												data += '<td> <a href="visualizar"><span id="non" class="glyphicon glyphicon-eye-open "> </a></td>' 
+											data += '</tr>'
+											
+									}
+									$(".table").append(data)
+								
+							});
+			
+							
+							
+block title
+		#titulo
+				.col-sm-12
+					h3  Libros

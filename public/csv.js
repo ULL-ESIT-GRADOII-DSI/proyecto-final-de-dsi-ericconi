@@ -1,4 +1,4 @@
-//(() => {
+(() => {
 "use strict"; // Use ECMAScript 5 strict mode in browsers that support it
 
 
@@ -18,17 +18,30 @@
         });
         
         
+        $.get('/buscarSeguidores',function(data){
+            var i,l;
+            console.log(data)
+            for (l in data){
+                for (i in l){
+                    $('#seg').append(data[l].siguiendo[i].name  + ' ')
+                }
+            }
+                
+                
+        });
         
         $("#edit").click(() => {
             $("#form_input").css("display","inherit");
             $("#saveima").css("display","inherit");
-             $("#edit").css("display","none");
+            $("#edit").css("display","none");
              
             
         });
         
-    
-          
+         $('.seguir').click(() => {
+            $.get('/seguir');
+         
+         });
     });
 
    $(window).load(function (){
@@ -38,7 +51,6 @@
         {
             clearInterval(i);
             $('.center').each( (_,y) => {
-                console.log($(y))
                 var tit =  $(y).attr('id');
                 var val =  $(y).attr('value');
                 $(y).click(() => { 
@@ -46,9 +58,22 @@
                              titulo: tit,
                              creador: val});
                 });
-            
+                 
             });
+           
+           $('.borrar').each( (_,y) => {
+                var tit =  $(y).attr('value');
+                $(y).click(() => { 
+                         $.get("/borrar",{
+                             titulo: tit
+                             });
+                        window.location.reload();
+                             
+                });
+                 
+            });
+           
         }
     }, 100);
 });
-//})();
+})();
