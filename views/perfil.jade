@@ -41,7 +41,7 @@ block content
                       th
             script(type='text/javascript').
               $.get('cargar', function (json) {
-                  
+                  console.log(json);
                   var data = "";
                   for (l in json) {
                       data += '<tr id="'+ json[l].titulo + '" class="center" value="' + json[l]._creator.name + '">'

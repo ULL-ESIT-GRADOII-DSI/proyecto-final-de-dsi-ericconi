@@ -1,0 +1,106 @@
+doctype
+html
+  head
+    title= title
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    // Bootstrap
+    link(href='/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
+    link(rel='shortcut icon', href='img.ico')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type='text/javascript', src='/jquery/dist/jquery.min.js')
+    script(src='/bootstrap/dist/js/bootstrap.min.js')
+    script(type="text/javascript" src="/underscore/underscore-min.js")
+    script(type='text/javascript', src='csv.js')
+  body
+    
+    
+    
+    #contenedor
+          #cabecera
+            .row
+              .col-sm-12
+                h1
+                  a#sinestilos(href='/')  Social Book 
+            block title
+          #menu
+            .row
+              .col-sm-12
+                br
+                br
+                nav.navbar.navbar-default
+                  .container-fluid
+                    // Collect the nav links, forms, and other content for toggling
+                    #menu_h.collapse.navbar-collapse
+                      ul.nav.navbar-nav
+                        li
+                          a(href='/') Home
+                        li
+                          a(href='#') Favoritos
+                        li
+                          a(href='#') Novedades
+                          
+                      form.navbar-form.navbar-left(role='search')
+                        .form-group
+                          input.form-control(type='text', placeholder='Search')
+                        button.btn.btn-default(type='submit') Buscar
+                      if(user)  
+                        ul.nav.navbar-nav.navbar-right
+                          li.dropdown
+                            a.dropdown-toggle(data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                              | Usuario
+                              span.caret
+                            ul.dropdown-menu
+                              li
+                                a(href='perfil') Perfil
+                              li
+                                a(href='logout') Salir
+                      else
+                       #menu_h.collapse.navbar-collapse.navbar-right
+                          ul.nav.navbar-nav
+                            li
+                              a(href='registro') Registrarse
+                            li
+                              a(href='auth') Iniciar Sesión
+                    // /.navbar-collapse
+                  // /.container-fluid
+            #contenido
+              .row
+                br
+                .col-sm-3
+                  br
+                  #perfil
+                     br
+                    if(user)
+                      if(user.photo)
+                        br
+                        img(src="#{user.photo}", height='200', width='200')
+                        br
+                        br
+                        button.seguir.btn.btn-succes(id="#{creador}") Seguir 
+                          span.glyphicon.glyphicon-user
+                        &nbsp; &nbsp; 
+                        button#like.btn.btn-succes(type='button') Like
+                          span.glyphicon.glyphicon-heart
+                        
+                      else
+                        img(src='Usuario-Icono.jpg', height='200', width='200')
+                        br
+                        br
+                        button.seguir.btn.btn-succes(id="#{creador}") Seguir 
+                          span.glyphicon.glyphicon-user
+                        &nbsp; &nbsp; 
+                        button#like.btn.btn-succes(type='button') Like
+                          span.glyphicon.glyphicon-heart
+                    else
+                      img(src='Usuario-Icono.jpg', height='200', width='200')
+                    
+                    
+                   
+                block content
+      
+      
+    
+    
+    

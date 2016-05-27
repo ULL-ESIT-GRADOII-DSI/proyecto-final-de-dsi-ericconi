@@ -125,7 +125,13 @@ body{
     border-radius: 5px;
   }
 #pie {
-  clear: both;
+  margin-top:100px;
+  background-color:#ff6600;
+  border-radius: 10px;
+}
+#pie a{
+  color:white;
+  font-weight: bold;
 }
 
 #inpuEmail3{
@@ -166,3 +172,19 @@ body{
 img{
   border-radius: 4px;
 }
+
+#like{
+  
+  background-color:red;
+  color:white;
+  width: 70px;
+}
+#like:hover{
+  color:#262626;
+ 
+}
+.seguir{
+  background-color: #33AFFF;
+  color:white;
+}
+

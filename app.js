@@ -190,6 +190,7 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
+// funcion para encriptar contraseña de los usuarios
 function encriptar(user, pass) {
    // usamos el metodo CreateHmac y le pasamos el parametro user y actualizamos el hash con la password
    var hmac = crypto.createHmac('sha1', user).update(pass).digest('hex');
@@ -220,13 +221,14 @@ app.get('/cargar',function(req, res) {
         .exec(function (err, file) {
           if (err) return err;
           var l;
+          var data = [];
           for (l in file) {
               if(file[l]._creator.name == name){
-                  res.json(file);
+                  data.push(file[l]);
                   
               }
           }
-              
+            res.json(data);
         });
     
 });
@@ -242,14 +244,14 @@ app.get('/buscarSeguidores',function(req, res) {
         .exec(function (err, file) {
           if (err) return err;
           var l,i;
-          console.log(file)
-          
+          var object = [];
           for (l in file) {
               for (i in l){
                    if(file[l].siguiendo[i].name == name){
-                        res.json(file);
+                        object.push(file[l]);
               }
           }
+          res.json(object);
          
              
           }
@@ -257,27 +259,85 @@ app.get('/buscarSeguidores',function(req, res) {
 });
 
 
+
+
+app.get('/cargarHome',function(req, res) {
+    var name = req.user.name;
+    var band = false;
+    var object = [];
+    var todos = [];
+    var l,i;
+    
+        Seguidores
+        .find({})
+        .populate('siguiendo')
+        .exec(function (err, file) {
+          if (err) return err;
+          //console.log(file);
+          
+            for (l in file) {
+                console.log(file[l])
+                   if(file[l].name == name){
+                       //console.log("pusheamos a " + file[l].siguiendo[0].name)
+                        object.push(file[l].siguiendo[0].name);
+                        band = true;
+                    }
+            }
+            if(band){
+                
+                    console.log("aqui");
+                    Books
+                    .find({})
+                    .populate('_creator')
+                    .exec(function (err, file) {
+                        var j;
+                        console.log(file);
+                        console.log(object[i])
+                        if (err) console.log("errorsito segundo");
+                        for (i in object){
+                            for(j in file){
+                               // console.log("y esto es " + file[j]._creator.name)
+                                if(file[j]._creator.name == object[i]){
+                                 //  console.log("pusheamos a " + file[j]._creator.name)
+                                   todos.push(file[j]); 
+                                }
+                                
+                            }
+                        
+                        }
+                        res.json(todos);  
+                    });
+            }
+            
+        });
+    
+   
+        
+    
+});
+
+
 app.get('/seguir',function(req, res) {
     var nus = req.user.name;
-    var cre = req.body.creador;
-    console.log("aqui");
-    UserDetails.findOne({"name":nus}, function(err, user) {
+    var cre = req.query.creador;
+
+    UserDetails.findOne({"name":cre}, function(err, user) {
         if(err) return err;
-    
         user.update(function(err){
-            if (err) console.log(err);
+            if(err) console.log("errorsito here");
+          
           
             /********************* USUARIO CON DATOS *********************/
             let input = new Seguidores({
                  name: nus,
                  siguiendo: user._id
             });
-     
+            
             
             /********************* GUARDADO EN BS *********************/
             input.save(function(err) {
                 if (err) {
-                    return err;
+                    console.log(err);
                 }
                 console.log("Guardado en BDD");
             });
@@ -287,7 +347,19 @@ app.get('/seguir',function(req, res) {
         
    });
    
+   
+
+   
 });
+
+
+app.get('/like', function(req, res){
+    
+    
+    //var megusta = req.user.likes;
+   // if
+    
+})
 
 
 var titulo;
@@ -307,7 +379,7 @@ app.get('/buscar',function(req, res) {
           for (l in file) {
               if(file[l]._creator.name == cre){
                   titulo = file[l].titulo;
-                  creador = file[l].creador;
+                  creador = cre;
                   contenido = file[l].contenido;
                   
               }
@@ -472,29 +544,17 @@ app.get('/save', function(req, res) {
 
 app.get('/', function(req,res){
     var user = req.user;
-    if(req.user){
-        UserDetails.findOne({'username':user.username},
-    		function(err, user2) {
-    		    if(err){return err}
-    		    user.photo = user2.photo;
-    		    console.log(user.photo);
-    	        	res.render('index', {
-                    title: 'Ejemplo de Passport JS',
-                    user: user
-                  });
-    		});
-    } else{
         res.render('index', {
             title: 'Ejemplo de Passport JS',
             user: user
         });   
-    }
+    
 });
 
 app.get('/perfil', function(req,res){
     var user = req.user;
-    if(req.user){
-        UserDetails.findOne({'username':user.username},
+    if(user){
+        UserDetails.findOne({'name':user.name},
     		function(err, user2) {
     		    if(err){return err}
     		    user.photo = user2.photo;

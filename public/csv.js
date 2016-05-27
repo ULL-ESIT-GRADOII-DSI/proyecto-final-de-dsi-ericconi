@@ -20,10 +20,10 @@
         
         $.get('/buscarSeguidores',function(data){
             var i,l;
-            console.log(data)
+            //console.log(data)
             for (l in data){
                 for (i in l){
-                    $('#seg').append(data[l].siguiendo[i].name  + ' ')
+                    $('#seg').append(data[l].name  + ' ')
                 }
             }
                 
@@ -39,9 +39,15 @@
         });
         
          $('.seguir').click(() => {
-            $.get('/seguir');
+       
+            $.get('/seguir',{"creador": $('.seguir').attr('id')});
          
          });
+         /*
+         $("#like").click(() =>{
+             $.get('/like',{"creador": $("#like").attr('id')});
+         });*/
+         
     });
 
    $(window).load(function (){
