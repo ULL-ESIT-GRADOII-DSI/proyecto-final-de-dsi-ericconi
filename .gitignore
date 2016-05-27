@@ -2,8 +2,8 @@ node_modules
 config.js
 
 lib-cov
-/data/*
-/uploads/*
+data
+uploads
 *.seed
 *.log
 *.csv
